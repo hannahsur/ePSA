@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prostate Cancer Risk Tool</title>
+    <style>
+        body {
+            font-family: Georgia;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+        .factor {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        select, input {
+            padding: 5px;
+            margin-top: 5px;
+        }
+        #result {
+            font-size: 1.2em;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e0f7fa;
+            border: 1px solid #009688;
+            display: none;
+        }
+        button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #367c39; /* Darker green */
+        }
+        input[type="number"] {
+            width: 100px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ePSA + pPSA + real PSA: A Non-validated Educational Risk Tool</h1>
+       
+        <form id="riskForm">
+            <h3>Non-Modifiable Risk Factors</h3>
+            <div class="factor">
+                <label for="age">Age Group:</label>
+                <select id="age">
+                    <option value="0">40-49</option>
+                    <option value="10">50-59</option>
+                    <option value="20">60-69</option>
+                    <option value="30">70+</option>
+                </select>
+            </div>
+
+            <div class="factor">
+                <label for="familyHistory">Family History of Prostate Cancer:</label>
+                <select id="familyHistory">
+                    <option value="0">No history</option>
+                    <option value="15">1 first-degree relative</option>
+                    <option value="30">2+ relatives</option>
+                </select>
+            </div>
+
+            <div class="factor">
+                <label for="race">Race:</label>
+                <select id="race">
+                    <option value="20">Black or African American</option>  
+                    <option value="0">White</option>
+                    <option value="0">Asian</option>
+                    <option value="10">Hispanic</option>
+                </select>
+            </div>
+
+            <div class="factor">
+                <label for="geneticRisk">Genetic Risk (Mutation):</label>
+                <select id="geneticRisk">
+                    <option value="0">No Mutations or Unknown</option>
+                    <option value="20">High-risk mutation (BRCA2, HOXB13)</option>
+                </select>
+            </div>
+            
+          <!-- PSA Level -->
+            <h3>Biomarkers and Imaging (if known)</h3>
+            <div class="factor">
+                <label for="psa">Enter PSA Level (ng/mL):</label>
+                <input type="number" id="psa" step="0.1" required>
+            </div>
+          <!-- PIRADS Score -->
+            <div class="factor">
+                <label for="pirads">PIRADS Score on MRI:</label>
+                <select id="pirads">
+                    <option value="0"> </option>  
+                    <option value="0">1</option>
+                    <option value="5">2</option>
+                    <option value="10">3</option>
+                    <option value="20">4</option>
+                    <option value="30">5</option>
+                </select>
+            </div>
+            <h3>Modifiable Risk Factors</h3>
+            <div class="factor">
+                <label for="height">Height (inches):</label>
+                <input type="number" id="height" required>
+            </div>
+
+            <div class="factor">
+                <label for="weight">Weight (pounds):</label>
+                <input type="number" id="weight" required>
+            </div>
+
+            <div class="factor">
+                <label for="comorbidities">Comorbidities:</label>
+                <select id="comorbidities">
+                    <option value="0">None</option>
+                    <option value="5">Diabetes</option>
+                    <option value="5">Cardiovascular Disease (e.g. high blood pressure)</option>
+                    <option value="15">Both conditions</option>
+                </select>
+            </div>
+
+            <div class="factor">
+                <label for="smoking">Smoking Status:</label>
+                <select id="smoking">
+                    <option value="0">Never</option>
+                    <option value="10">Former Smoker</option>
+                    <option value="20">Current Smoker</option>
+                </select>
+            </div>
+
+            <div class="factor">
+                <label for="exercise">Exercise Frequency:</label>
+                <select id="exercise">
+                    <option value="5">Some Exercise</option>
+                    <option value="0">Regular Exercise</option>
+                    <option value="10">No Exercise</option>
+                </select>
+            </div>
+
+            <div class="factor">
+                <label for="diet">Diet Type:</label>
+                <select id="diet">
+                  <option value="5">Mixed diet</option>  
+                  <option value="0">Healthy diet (plant-based, high in vegetables)</option>
+                  <option value="10">High red meat</option>
+                </select>
+            </div>
+            
+            <h3>Urinary Symptoms (IPSS)</h3>
+            
+            <div class="factor">
+                <label for="q1">1. Incomplete emptying:</label>
+                <select id="q1">
+                    <option value="0">0 - Never</option>
+                    <option value="1">1 - Less than 1/5 times</option>
+                    <option value="2">2 - Less than half the time</option>
+                    <option value="3">3 - About half the time</option>
+                    <option value="4">4 - More than half the time</option>
+                    <option value="5">5 - Almost always</option>
+                </select>
+            </div>
+            <div class="factor">
+                <label for="q2">2. Frequency:</label>
+                <select id="q2">
+                    <option value="0">0 - Never</option>
+                    <option value="1">1 - Less than 1/5 times</option>
+                    <option value="2">2 - Less than half the time</option>
+                    <option value="3">3 - About half the time</option>
+                    <option value="4">4 - More than half the time</option>
+                    <option value="5">5 - Almost always</option>
+                </select>
+            </div>
+            <div class="factor">
+                <label for="q3">3. Intermittency:</label>
+                <select id="q3">
+                    <option value="0">0 - Never</option>
+                    <option value="1">1 - Less than 1/5 times</option>
+                    <option value="2">2 - Less than half the time</option>
+                    <option value="3">3 - About half the time</option>
+                    <option value="4">4 - More than half the time</option>
+                    <option value="5">5 - Almost always</option>
+                </select>
+            </div>
+            <div class="factor">
+                <label for="q4">4. Urgency:</label>
+                <select id="q4">
+                    <option value="0">0 - Never</option>
+                    <option value="1">1 - Less than 1/5 times</option>
+                    <option value="2">2 - Less than half the time</option>
+                    <option value="3">3 - About half the time</option>
+                    <option value="4">4 - More than half the time</option>
+                    <option value="5">5 - Almost always</option>
+                </select>
+            </div>
+            <div class="factor">
+                <label for="q5">5. Weak stream:</label>
+                <select id="q5">
+                    <option value="0">0 - Never</option>
+                    <option value="1">1 - Less than 1/5 times</option>
+                    <option value="2">2 - Less than half the time</option>
+                    <option value="3">3 - About half the time</option>
+                    <option value="4">4 - More than half the time</option>
+                    <option value="5">5 - Almost always</option>
+                </select>
+            </div>
+            <div class="factor">
+                <label for="q6">6. Straining:</label>
+                <select id="q6">
+                    <option value="0">0 - Never</option>
+                    <option value="1">1 - Less than 1/5 times</option>
+                    <option value="2">2 - Less than half the time</option>
+                    <option value="3">3 - About half the time</option>
+                    <option value="4">4 - More than half the time</option>
+                    <option value="5">5 - Almost always</option>
+                </select>
+            </div>
+            <div class="factor">
+                <label for="q7">7. Nocturia:</label>
+                <select id="q7">
+                    <option value="0">0 - Never</option>
+                    <option value="1">1 - Less than 1/5 times</option>
+                    <option value="2">2 - Less than half the time</option>
+                    <option value="3">3 - About half the time</option>
+                    <option value="4">4 - More than half the time</option>
+                    <option value="5">5 - Almost always</option>
+                </select>
+            </div>
+            
+            <button type="button" onclick="calculateRisk()">Calculate Risk</button>
+        </form>
+
+        <div id="result">
+            <p>Your Total Points: <span id="totalPoints">0</span></p>
+            <p>Your Risk Percentage: <span id="riskPercentage"></span></p>
+            <p>Your Risk Category: <span id="riskCategory">Low</span></p>
+        </div>
+    </div>
+
+    <script>
+        function calculateRisk() {
+            // Retrieve values from form
+            const age = parseInt(document.getElementById('age').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const familyHistory = parseInt(document.getElementById('familyHistory').value);
+            const race = parseInt(document.getElementById('race').value);
+            const geneticRisk = parseInt(document.getElementById('geneticRisk').value);
+            const comorbidities = parseInt(document.getElementById('comorbidities').value);
+            const smoking = parseInt(document.getElementById('smoking').value);
+            const exercise = parseInt(document.getElementById('exercise').value);
+            const diet = parseInt(document.getElementById('diet').value);
+            const psa = parseFloat(document.getElementById('psa').value);
+            const pirads = parseInt(document.getElementById('pirads').value);
+            
+            const q1 = parseInt(document.getElementById('q1').value);
+            const q2 = parseInt(document.getElementById('q2').value);
+            const q3 = parseInt(document.getElementById('q3').value);
+            const q4 = parseInt(document.getElementById('q4').value);
+            const q5 = parseInt(document.getElementById('q5').value);
+            const q6 = parseInt(document.getElementById('q6').value);
+            const q7 = parseInt(document.getElementById('q7').value);
+
+            
+            // Calculate BMI (weight in pounds, height in inches)
+            const bmi = (weight / (height * height)) * 703;
+
+            // Determine BMI risk category
+            let bmiPoints = 0;
+            if (bmi < 25) {
+                bmiPoints = 0; // Normal weight
+            } else if (bmi >= 25 && bmi < 30) {
+                bmiPoints = 5; // Overweight
+            } else if (bmi >= 30) {
+                bmiPoints = 10; // Obese
+            }
+            
+            // PSA Risk points based on levels
+              let psaPoints = 0;
+              if (psa < 1) psaPoints = 0;      // Low risk
+              else if (psa >= 1 && psa <= 2.5) psaPoints = 5;  // Moderate risk
+              else if (psa > 2.5 && psa <= 4) psaPoints = 10;  // Elevated risk
+              else if (psa > 4) psaPoints = 20;  // High risk
+             
+            // IPSS Score Calculation
+              const ipssScore = q1 + q2 + q3 + q4 + q5 + q6 + q7;
+
+            //IPSS calculation
+            let ipssPoints = 0;
+            if (ipssScore <= 7) {
+              ipssPoints = 0; // Mild
+            } else if (ipssScore > 7 && ipssScore <= 19) {
+              ipssPoints = 5; // Moderate         
+            } else if (ipssScore > 20) {
+              ipssPoints = 0; // Severe
+            }
+
+
+            // Calculate total points
+            const totalPoints = age + bmiPoints + familyHistory + race + geneticRisk + comorbidities + smoking + exercise + diet + psaPoints + pirads - ipssPoints;
+            
+            // Map total points to risk percentage
+            let riskPercentage = "";
+            if (totalPoints <= 40) riskPercentage = "0-10%";
+            else if (totalPoints > 40 && totalPoints <= 80) riskPercentage = "10-20%";
+            else if (totalPoints > 80 && totalPoints <= 120) riskPercentage = "20-40%";
+            else if (totalPoints > 120) riskPercentage = "40-70%";
+            
+
+            // Risk Category Calculation
+            let riskCategory = 'Low';
+            if (totalPoints > 40 && totalPoints <= 80) {
+                riskCategory = 'Moderate';
+            }
+            if (totalPoints > 80 && totalPoints <= 120) {
+                riskCategory = 'High';
+            }
+            if (totalPoints > 120) {
+                riskCategory = 'Very High';
+            }
+
+
+            document.getElementById('totalPoints').textContent = totalPoints;
+            document.getElementById('riskPercentage').textContent = riskPercentage;
+            document.getElementById('riskCategory').textContent = riskCategory;
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
