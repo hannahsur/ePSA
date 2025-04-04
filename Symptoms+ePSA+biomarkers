@@ -76,9 +76,9 @@
             <div class="factor">
                 <label for="familyHistory">Family History of Prostate Cancer:</label>
                 <select id="familyHistory">
-                    <option value="0">No history</option>
-                    <option value="15">1 first-degree relative</option>
-                    <option value="30">2+ relatives</option>
+                    <option value="1">No history</option>
+                    <option value="2.2">1 first-degree relative (2.2x risk)</option>
+                    <option value="3.7">2+ relatives (3.7x risk)</option>
                 </select>
             </div>
 
@@ -96,7 +96,7 @@
                 <label for="geneticRisk">Genetic Risk (Mutation):</label>
                 <select id="geneticRisk">
                     <option value="0">No Mutations or Unknown</option>
-                    <option value="20">High-risk mutation (BRCA2, HOXB13)</option>
+                    <option value="20">High-risk mutation (BRCA2, BRCA1, HOXB13, CHEK2, PALB2, ATM)</option>
                 </select>
             </div>
             
@@ -262,7 +262,7 @@
             const age = parseInt(document.getElementById('age').value);
             const height = parseFloat(document.getElementById('height').value);
             const weight = parseFloat(document.getElementById('weight').value);
-            const familyHistory = parseInt(document.getElementById('familyHistory').value);
+            const familyHistoryMultiplier = parseFloat(document.getElementById('familyHistory').value);
             const race = parseInt(document.getElementById('race').value);
             const geneticRisk = parseInt(document.getElementById('geneticRisk').value);
             const comorbidities = parseInt(document.getElementById('comorbidities').value);
@@ -316,7 +316,7 @@
 
 
             // Calculate total points
-            const totalPoints = age + bmiPoints + familyHistory + race + geneticRisk + comorbidities + smoking + exercise + diet + psaPoints + pirads - ipssPoints;
+            const totalPoints = age + bmiPoints + (familyHistoryMultiplier * 10) + race + geneticRisk + comorbidities + smoking + exercise + diet + psaPoints + pirads - ipssPoints;
             
             // Map total points to risk percentage
             let riskPercentage = "";
